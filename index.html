@@ -478,12 +478,16 @@
       本当に使える言葉が身につく言語学習アプリ。
     </p>
 
-    <div class="waitlist-form" id="waitlist-form">
-      <input type="email" class="email-input" placeholder="メールアドレスを入力" id="email-input">
-      <button class="cta-btn" onclick="submitWaitlist()">BETAに参加する →</button>
-    </div>
+    <form class="waitlist-form" id="waitlist-form-1"
+          action="https://formspree.io/f/REPLACE_WITH_FORMSPREE_ID"
+          method="POST"
+          onsubmit="handleSubmit(event, 'waitlist-form-1', 'success-msg-1')">
+      <input type="email" name="email" class="email-input" placeholder="メールアドレスを入力" required>
+      <input type="hidden" name="source" value="hero-section">
+      <button type="submit" class="cta-btn">BETAに参加する →</button>
+    </form>
 
-    <div class="success-msg" id="success-msg">
+    <div class="success-msg" id="success-msg-1">
       ✓ 登録完了！BETAアクセス準備ができたらご連絡します 🎉
     </div>
 
@@ -592,10 +596,14 @@
   <section class="footer-cta">
     <h2>最初の50人に<br>なりませんか</h2>
     <p>プロダクトを一緒に作り上げるBETAテスターを募集中</p>
-    <div class="waitlist-form">
-      <input type="email" class="email-input" placeholder="メールアドレスを入力" id="email-input-2">
-      <button class="cta-btn" onclick="submitWaitlist2()">BETAに参加する →</button>
-    </div>
+    <form class="waitlist-form" id="waitlist-form-2"
+          action="https://formspree.io/f/REPLACE_WITH_FORMSPREE_ID"
+          method="POST"
+          onsubmit="handleSubmit(event, 'waitlist-form-2', 'success-msg-2')">
+      <input type="email" name="email" class="email-input" placeholder="メールアドレスを入力" required>
+      <input type="hidden" name="source" value="footer-section">
+      <button type="submit" class="cta-btn">BETAに参加する →</button>
+    </form>
     <div class="success-msg" id="success-msg-2">
       ✓ 登録完了！BETAアクセス準備ができたらご連絡します 🎉
     </div>
@@ -607,27 +615,27 @@
   </footer>
 
   <script>
-    function submitWaitlist() {
-      const email = document.getElementById('email-input').value;
-      if (!email || !email.includes('@')) {
-        alert('有効なメールアドレスを入力してください');
-        return;
-      }
-      // TODO: Replace with actual form submission (Tally.so / Supabase)
-      document.getElementById('waitlist-form').style.display = 'none';
-      document.getElementById('success-msg').style.display = 'block';
-      console.log('Waitlist signup:', email);
-    }
+    async function handleSubmit(e, formId, successId) {
+      e.preventDefault();
+      const form = document.getElementById(formId);
+      const data = new FormData(form);
 
-    function submitWaitlist2() {
-      const email = document.getElementById('email-input-2').value;
-      if (!email || !email.includes('@')) {
-        alert('有効なメールアドレスを入力してください');
-        return;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById(successId).style.display = 'block';
+        } else {
+          alert('エラーが発生しました。もう一度お試しください。');
+        }
+      } catch {
+        alert('送信に失敗しました。ページを更新してもう一度お試しください。');
       }
-      document.querySelector('.footer-cta .waitlist-form').style.display = 'none';
-      document.getElementById('success-msg-2').style.display = 'block';
-      console.log('Waitlist signup:', email);
     }
   </script>
 </body>
